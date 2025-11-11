@@ -49,10 +49,6 @@ dp = Dispatcher()
 # Initialize Bot instance with default bot properties which will be passed to all API calls
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
-# CHANNEL_ID = -1002450731122
-# chat = -1002301080691
-
-
 
 async def reupdata(key, data):
     await client_redis.set(
@@ -117,246 +113,275 @@ async def post_request_rega(id_telega, data):
 
 
 
+# @dp.message(CommandStart())
+# async def command_start_handler(message: Message) -> None:
+#     """
+#     This handler receives messages with `/start` command
+#     """
+#     id_telega = message.chat.id
+#
+#     tt = f"{message.chat.type}"
+#
+#     if id_telega > 1 and tt == "private":
+#         # await post_request(id_telega, ref_mess)
+#         pass
+#     else:
+#         print("id_telega", id_telega)
+#         print("message", message)
+#
+#         return False
+#
+#     startapp_param = None
+#
+#     # Проверяем, есть ли параметры в тексте команды
+#     if '?startapp=' in message.text:
+#         startapp_param = message.text.split('?startapp=')[1].split()[0]
+#
+#     # URL вашей игры
+#     game_url = "https://casinogame-production.up.railway.app/v3"
+#
+#     # Если есть параметр, добавляем его в URL
+#     if startapp_param:
+#         game_url = f"{game_url}?startapp={startapp_param}"
+#
+#         # Создаем кнопку с Mini App
+#         keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+#             InlineKeyboardButton(
+#                 text="🎮 Открыть игру",
+#                 web_app=WebAppInfo(
+#                     url=game_url,
+#                     start_parameter=startapp_param  # Передаем параметр через start_parameter
+#                 )
+#             )
+#         ]])
+#
+#         await message.answer(
+#             "🎰 Добро пожаловать в Pokemon Stars!",
+#             reply_markup=keyboard
+#         )
+#
+#
+#         return
+#
+#
+#
+#
+#
+#     # print(message.chat.username)
+#     print(message.text[7:])
+#     user_n = message.chat.username
+#
+#     first_n = message.from_user.first_name
+#     last_n = message.from_user.last_name
+#     language = message.from_user.language_code
+#
+#
+#     data = {
+#         "username": user_n,
+#         "first_name": first_n,
+#         'last_name': last_n,
+#         'language_code': language,
+#         "ref": message.text[7:]
+#     }
+#
+#         # Создание кнопки с веб-приложением
+#     # урл игры
+#
+#
+#     if language == "ru":
+#         mess = "Го ловить Stars"
+#
+#
+#         mess_botton = "Забрать 200 Здвезд"
+#
+#     else:
+#
+#         mess = "Го ловить Stars"
+#
+#         mess_botton = "Забрать 200 Здвезд"
+#
+#
+#     urll = f"https://casinogame-production.up.railway.app/v3"
+#     # Создание кнопки с веб-приложением
+#
+#     bt_by_viki = InlineKeyboardButton(text=mess_botton, web_app=WebAppInfo(url=urll))
+#
+#     # Создание клавиатуры с использованием inline_keyboard
+#     kb = InlineKeyboardMarkup(inline_keyboard=[[bt_by_viki]])
+#
+#     mm = await bot.send_message(id_telega, mess, reply_markup=kb, message_effect_id="5046509860389126442")
+#
+#     # Регаем человека
+#     # await post_request_rega(id_telega, data)
+#
+#
+#     # Пытаемся закрепить сообщение
+#     try:
+#         await bot.pin_chat_message(chat_id=message.chat.id, message_id=mm.message_id)
+#         # await asyncio.sleep(1)
+#     except Exception as e:
+#         print(e)
+#
+#
+#
+#
+#     # Сообщение о соц сетях
+#     # await asyncio.sleep(10 * 60)
+#     #
+#     # if language == "ru":
+#     #     mess = "Круто играешь! Подписывайся на наши социальные сети, чтобы быть в курсе всех обновлений и розыгрышей игры!" \
+#     #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
+#     #            "\nTelegram RU — https://t.me/GiftsBeats_ru"
+#     #
+#     # else:
+#     #     mess = "Nice game! Follow us on social media to stay up to date with all the latest updates and game giveaways!" \
+#     #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
+#     #            "\nTelegram ENG — https://t.me/GiftsBeats"
+#     # try:
+#     #     await bot.send_message(id_telega, mess, disable_web_page_preview=True)
+#     # except:
+#     #     pass
+#
+#     # await new_short_description()
+
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
+    Обрабатывает deep links вида: t.me/pokemon_stars_bot/go_stars?startapp=TEST123
     """
     id_telega = message.chat.id
-
     tt = f"{message.chat.type}"
 
     if id_telega > 1 and tt == "private":
-        # await post_request(id_telega, ref_mess)
         pass
     else:
         print("id_telega", id_telega)
         print("message", message)
-
         return False
 
+    # URL игры
+    game_base_url = "https://casinogame-production.up.railway.app/v3"
     startapp_param = None
 
-    # Проверяем, есть ли параметры в тексте команды
-    if '?startapp=' in message.text:
-        startapp_param = message.text.split('?startapp=')[1].split()[0]
+    # Логируем для отладки
+    print(f"📥 Получена команда /start")
+    print(f"📝 Текст сообщения: {message.text}")
+    print(f"🔗 Полный текст: {message.text}")
 
-    # URL вашей игры
-    game_url = "https://casinogame-production.up.railway.app/v3"
+    # Способ 1: Проверяем параметр startapp в тексте команды
+    # Формат: /start go_stars?startapp=TEST123
+    # или: /start?startapp=TEST123
+    if message.text:
+        # Проверяем формат: /start go_stars?startapp=TEST123
+        if '?startapp=' in message.text:
+            try:
+                # Извлекаем часть после ?startapp=
+                parts = message.text.split('?startapp=')
+                if len(parts) > 1:
+                    # Берем параметр до пробела или конца строки
+                    startapp_param = parts[1].split()[0].split('&')[0]
+                    print(f"✅ Параметр startapp найден в тексте: {startapp_param}")
+            except Exception as e:
+                print(f"⚠️ Ошибка при извлечении startapp из текста: {e}")
 
-    # Если есть параметр, добавляем его в URL
+        # Проверяем формат: /start startapp=TEST123 (без go_stars)
+        elif 'startapp=' in message.text:
+            try:
+                parts = message.text.split('startapp=')
+                if len(parts) > 1:
+                    startapp_param = parts[1].split()[0].split('&')[0]
+                    print(f"✅ Параметр startapp найден (альтернативный формат): {startapp_param}")
+            except Exception as e:
+                print(f"⚠️ Ошибка при извлечении startapp (альтернативный): {e}")
+
+    # Способ 2: Проверяем entities (для ссылок в сообщении)
+    if not startapp_param and message.entities:
+        for entity in message.entities:
+            if entity.type in ["url", "text_link"]:
+                url_text = message.text[entity.offset:entity.offset + entity.length]
+                print(f"🔍 Найдена ссылка в entities: {url_text}")
+                if '?startapp=' in url_text:
+                    try:
+                        startapp_param = url_text.split('?startapp=')[1].split('&')[0].split()[0]
+                        print(f"✅ Параметр startapp найден в ссылке: {startapp_param}")
+                        break
+                    except Exception as e:
+                        print(f"⚠️ Ошибка при извлечении startapp из ссылки: {e}")
+
+    # Формируем URL игры с параметром
+    game_url = game_base_url
     if startapp_param:
-        game_url = f"{game_url}?startapp={startapp_param}"
+        # Добавляем параметр startapp в URL игры
+        game_url = f"{game_base_url}?startapp={startapp_param}"
+        print(f"🎯 URL игры с параметром: {game_url}")
+    else:
+        print(f"ℹ️ Параметр startapp не найден, используем базовый URL: {game_url}")
 
-        # Создаем кнопку с Mini App
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(
-                text="🎮 Открыть игру",
-                web_app=WebAppInfo(
-                    url=game_url,
-                    start_parameter=startapp_param  # Передаем параметр через start_parameter
-                )
-            )
-        ]])
-
-        await message.answer(
-            "🎰 Добро пожаловать в Pokemon Stars!",
-            reply_markup=keyboard
-        )
-
-
-        return
-
-
-
-
-
-    # print(message.chat.username)
-    print(message.text[7:])
+    # Получаем данные пользователя
     user_n = message.chat.username
-
     first_n = message.from_user.first_name
     last_n = message.from_user.last_name
     language = message.from_user.language_code
 
+    # Извлекаем реферальный код из старого формата (если есть)
+    ref_code = message.text[7:] if len(message.text) > 7 else ""
+
+    # Убираем startapp из ref_code, если он там есть
+    if ref_code and '?startapp=' in ref_code:
+        ref_code = ref_code.split('?startapp=')[0]
 
     data = {
         "username": user_n,
         "first_name": first_n,
         'last_name': last_n,
         'language_code': language,
-        "ref": message.text[7:]
+        "ref": ref_code
     }
 
-        # Создание кнопки с веб-приложением
-    # урл игры
-
-
+    # Текст сообщения
     if language == "ru":
         mess = "Го ловить Stars"
-
-
         mess_botton = "Забрать 200 Здвезд"
-
     else:
-
         mess = "Го ловить Stars"
-
         mess_botton = "Забрать 200 Здвезд"
 
+    # Создаем кнопку с Mini App
+    # Если есть startapp_param, передаем его через start_parameter (для Telegram API)
+    # И также добавляем в URL (для фронтенда)
+    web_app_info = WebAppInfo(url=game_url)
+    if startapp_param:
+        # Передаем параметр через start_parameter для Telegram API
+        web_app_info = WebAppInfo(
+            url=game_url,
+            start_parameter=startapp_param
+        )
+        print(f"📤 Передаем startapp через start_parameter: {startapp_param}")
 
-    urll = f"https://casinogame-production.up.railway.app/v3"
-    # Создание кнопки с веб-приложением
+    bt_by_viki = InlineKeyboardButton(
+        text=mess_botton,
+        web_app=web_app_info
+    )
 
-    bt_by_viki = InlineKeyboardButton(text=mess_botton, web_app=WebAppInfo(url=urll))
-
-    # Создание клавиатуры с использованием inline_keyboard
+    # Создание клавиатуры
     kb = InlineKeyboardMarkup(inline_keyboard=[[bt_by_viki]])
 
-    mm = await bot.send_message(id_telega, mess, reply_markup=kb, message_effect_id="5046509860389126442")
+    mm = await bot.send_message(
+        id_telega,
+        mess,
+        reply_markup=kb,
+        message_effect_id="5046509860389126442"
+    )
 
-    # Регаем человека
+    # Регаем человека (раскомментируйте если нужно)
     # await post_request_rega(id_telega, data)
-
 
     # Пытаемся закрепить сообщение
     try:
         await bot.pin_chat_message(chat_id=message.chat.id, message_id=mm.message_id)
-        # await asyncio.sleep(1)
     except Exception as e:
-        print(e)
-
-
-
-
-    # Сообщение о соц сетях
-    # await asyncio.sleep(10 * 60)
-    #
-    # if language == "ru":
-    #     mess = "Круто играешь! Подписывайся на наши социальные сети, чтобы быть в курсе всех обновлений и розыгрышей игры!" \
-    #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
-    #            "\nTelegram RU — https://t.me/GiftsBeats_ru"
-    #
-    # else:
-    #     mess = "Nice game! Follow us on social media to stay up to date with all the latest updates and game giveaways!" \
-    #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
-    #            "\nTelegram ENG — https://t.me/GiftsBeats"
-    # try:
-    #     await bot.send_message(id_telega, mess, disable_web_page_preview=True)
-    # except:
-    #     pass
-
-    # await new_short_description()
-
-
-
-
-
-
-img_go_link = str("BAACAgIAAxkBAAEBNV9oOZ7Uutfs3OoAAWxjzTe6pmjN_HYAAl9zAAJkt9BJulcx7zKYtkI2BA")
-mess_text = str("Текс")
-link_btn = "https://t.me/mastercatnews"
-mess_btn = str("Перейти в канал")
-
-
-
-# Обработчик для всех сообщений в супергруппе
-@dp.message()
-async def chek_m(message: types.Message):
-
-    pass
-    # Проверяем, что сообщение пришло из супергруппы
-    # if message.chat.type == "supergroup":
-    #     user_id = message.from_user.id  # Получаем ID пользователя
-    #     chat_id = message.chat.id  # Получаем ID супергруппы
-    #
-    #     # print(message)
-    #
-    #     # print(f"Сообщение из супергруппы {chat_id}, от пользователя {user_id}. Текст: {message.text}")
-    #     try:
-    #         # Получаем текущее время в формате секунд с начала эпохи
-    #         tim0 = time.time()
-    #
-    #         # сегодня дата
-    #         day = time.strftime("%Y-%m-%d", time.localtime(tim0))
-    #
-    #         # данные игрока
-    #         user_caht = await redata(f"chat:{user_id}")
-    #
-    #         if user_caht != None:
-    #
-    #             # манипулии с данными
-    #
-    #             # проверсяем если все хорошо
-    #             if (tim0 - user_caht["old_time"]) < (24 * 60 * 60):
-    #
-    #                 # последний день юзера
-    #                 old_day_user = time.strftime("%Y-%m-%d", time.localtime(user_caht["old_time"]))
-    #                 if old_day_user != day:
-    #                     user_caht["old_day"] = day
-    #                     user_caht["value_day"] += 1
-    #
-    #                 user_caht["old_time"] = tim0
-    #                 user_caht["value_mess"] += 1
-    #
-    #             else:
-    #
-    #                 user_caht["old_time"] = tim0
-    #                 user_caht["old_day"] = day
-    #                 user_caht["old_time"] = 0
-    #                 user_caht["value_mess"] = 0
-    #
-    #
-    #
-    #             await reupdata(f"chat:{user_id}", user_caht)
-    #
-    #
-    #
-    #
-    #         else:
-    #
-    #             # Создаем данные для игрока
-    #             dd = {
-    #                 "id_telega": user_id,
-    #                 "old_time": tim0,
-    #                 "old_day": time.strftime("%Y-%m-%d", time.localtime(time.time())),
-    #                 "value_mess": 1,
-    #                 "value_day": 0,
-    #                 "day_gift": 0
-    #             }
-    #
-    #             await reupdata(f"chat:{user_id}", dd)
-    #
-    #     except Exception as ex:
-    #
-    #         mess = f"Ошибка в чекере времея в чате: {ex},\nuser_id: {user_id}"
-    #         print(mess)
-    #         await bot.send_message(310410518, mess)
-    #
-    #
-    #
-    # if message.chat.type == "private":
-    #
-    #
-    #     user_id = message.from_user.id  # Получаем ID пользователя
-    #     chat_id = message.chat.id
-    #
-    #
-    #     # if user_id == 310410518:
-    #     #     urll = "https://t.me/mastercatonlinebot/mastercats"
-    #     #     mess = f"Master Cat Online"
-    #     #
-    #     #     # Создание кнопки с веб-приложением
-    #     #     bt_by_viki = InlineKeyboardButton(text="Play Master Cat", url=urll)
-    #     #
-    #     #     # Создание клавиатуры с использованием inline_keyboard
-    #     #     kb = InlineKeyboardMarkup(inline_keyboard=[[bt_by_viki]])
-    #     #
-    #     #     await bot.send_message(int(-1002301080691), mess, reply_markup=kb)
-    #     #
-    #     # # -1002301080691
-
-
+        print(f"⚠️ Не удалось закрепить сообщение: {e}")
 
 
 
