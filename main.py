@@ -135,6 +135,39 @@ async def command_start_handler(message: Message) -> None:
 
         return False
 
+    startapp_param = None
+
+    # Проверяем, есть ли параметры в тексте команды
+    if '?startapp=' in message.text:
+        startapp_param = message.text.split('?startapp=')[1].split()[0]
+
+    # URL вашей игры
+    game_url = "https://casinogame-production.up.railway.app/v3"
+
+    # Если есть параметр, добавляем его в URL
+    if startapp_param:
+        game_url = f"{game_url}?startapp={startapp_param}"
+
+        # Создаем кнопку с Mini App
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(
+                text="🎮 Открыть игру",
+                web_app=WebAppInfo(
+                    url=game_url,
+                    start_parameter=startapp_param  # Передаем параметр через start_parameter
+                )
+            )
+        ]])
+
+        await message.answer(
+            "🎰 Добро пожаловать в Pokemon Stars!",
+            reply_markup=keyboard
+        )
+
+
+        return
+
+
 
 
 
