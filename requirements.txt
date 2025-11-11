@@ -1,0 +1,6 @@
+aiogram==3.15.0
+requests==2.31.0
+motor==3.4.0
+pymongo==4.8.0
+redis==5.0.1
+aiohttp>=3.8,<4.0
