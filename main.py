@@ -76,7 +76,7 @@ admin = [310410518]
 #  Регистрация нового кота
 
 async def post_request_rega(id_telega, data):
-    url = "https://giftback-production.up.railway.app/v2"
+    url = "https://worker-production-e29a.up.railway.app/v3"
 
     try:
         id_telega_int = int(id_telega)
@@ -85,7 +85,7 @@ async def post_request_rega(id_telega, data):
         return None
 
     payload = {
-        "method": "telega_rega_bot",
+        "method": "start_bot",
         "call_started": "",
         "params": {
             "id_telega": id_telega_int,
@@ -111,138 +111,6 @@ async def post_request_rega(id_telega, data):
         print("Ошибка при запросе:", e)
         return None
 
-
-
-# @dp.message(CommandStart())
-# async def command_start_handler(message: Message) -> None:
-#     """
-#     This handler receives messages with `/start` command
-#     """
-#     id_telega = message.chat.id
-#
-#     tt = f"{message.chat.type}"
-#
-#     if id_telega > 1 and tt == "private":
-#         # await post_request(id_telega, ref_mess)
-#         pass
-#     else:
-#         print("id_telega", id_telega)
-#         print("message", message)
-#
-#         return False
-#
-#     startapp_param = None
-#
-#     # Проверяем, есть ли параметры в тексте команды
-#     if '?startapp=' in message.text:
-#         startapp_param = message.text.split('?startapp=')[1].split()[0]
-#
-#     # URL вашей игры
-#     game_url = "https://casinogame-production.up.railway.app/v3"
-#
-#     # Если есть параметр, добавляем его в URL
-#     if startapp_param:
-#         game_url = f"{game_url}?startapp={startapp_param}"
-#
-#         # Создаем кнопку с Mini App
-#         keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-#             InlineKeyboardButton(
-#                 text="🎮 Открыть игру",
-#                 web_app=WebAppInfo(
-#                     url=game_url,
-#                     start_parameter=startapp_param  # Передаем параметр через start_parameter
-#                 )
-#             )
-#         ]])
-#
-#         await message.answer(
-#             "🎰 Добро пожаловать в Pokemon Stars!",
-#             reply_markup=keyboard
-#         )
-#
-#
-#         return
-#
-#
-#
-#
-#
-#     # print(message.chat.username)
-#     print(message.text[7:])
-#     user_n = message.chat.username
-#
-#     first_n = message.from_user.first_name
-#     last_n = message.from_user.last_name
-#     language = message.from_user.language_code
-#
-#
-#     data = {
-#         "username": user_n,
-#         "first_name": first_n,
-#         'last_name': last_n,
-#         'language_code': language,
-#         "ref": message.text[7:]
-#     }
-#
-#         # Создание кнопки с веб-приложением
-#     # урл игры
-#
-#
-#     if language == "ru":
-#         mess = "Го ловить Stars"
-#
-#
-#         mess_botton = "Забрать 200 Здвезд"
-#
-#     else:
-#
-#         mess = "Го ловить Stars"
-#
-#         mess_botton = "Забрать 200 Здвезд"
-#
-#
-#     urll = f"https://casinogame-production.up.railway.app/v3"
-#     # Создание кнопки с веб-приложением
-#
-#     bt_by_viki = InlineKeyboardButton(text=mess_botton, web_app=WebAppInfo(url=urll))
-#
-#     # Создание клавиатуры с использованием inline_keyboard
-#     kb = InlineKeyboardMarkup(inline_keyboard=[[bt_by_viki]])
-#
-#     mm = await bot.send_message(id_telega, mess, reply_markup=kb, message_effect_id="5046509860389126442")
-#
-#     # Регаем человека
-#     # await post_request_rega(id_telega, data)
-#
-#
-#     # Пытаемся закрепить сообщение
-#     try:
-#         await bot.pin_chat_message(chat_id=message.chat.id, message_id=mm.message_id)
-#         # await asyncio.sleep(1)
-#     except Exception as e:
-#         print(e)
-#
-#
-#
-#
-#     # Сообщение о соц сетях
-#     # await asyncio.sleep(10 * 60)
-#     #
-#     # if language == "ru":
-#     #     mess = "Круто играешь! Подписывайся на наши социальные сети, чтобы быть в курсе всех обновлений и розыгрышей игры!" \
-#     #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
-#     #            "\nTelegram RU — https://t.me/GiftsBeats_ru"
-#     #
-#     # else:
-#     #     mess = "Nice game! Follow us on social media to stay up to date with all the latest updates and game giveaways!" \
-#     #            "\n\nTwitter (X) — https://x.com/giftsbeats" \
-#     #            "\nTelegram ENG — https://t.me/GiftsBeats"
-#     # try:
-#     #     await bot.send_message(id_telega, mess, disable_web_page_preview=True)
-#     # except:
-#     #     pass
-#
-#     # await new_short_description()
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
@@ -331,12 +199,15 @@ async def command_start_handler(message: Message) -> None:
     if ref_code and '?startapp=' in ref_code:
         ref_code = ref_code.split('?startapp=')[0]
 
+
+
+
     data = {
+        "id": id_telega,
         "username": user_n,
         "first_name": first_n,
         'last_name': last_n,
-        'language_code': language,
-        "ref": ref_code
+        'language_code': language
     }
 
     # Текст сообщения
@@ -375,7 +246,7 @@ async def command_start_handler(message: Message) -> None:
     )
 
     # Регаем человека (раскомментируйте если нужно)
-    # await post_request_rega(id_telega, data)
+    await post_request_rega(id_telega, data)
 
     # Пытаемся закрепить сообщение
     try:
