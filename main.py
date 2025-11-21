@@ -200,8 +200,6 @@ async def command_start_handler(message: Message) -> None:
         ref_code = ref_code.split('?startapp=')[0]
 
 
-
-
     data = {
         "id": id_telega,
         "username": user_n,
@@ -212,15 +210,18 @@ async def command_start_handler(message: Message) -> None:
 
     # Текст сообщения
     if language == "ru":
-        mess = "Го ловить Stars"
-        mess_botton = "Забрать 200 Здвезд"
+        mess = "Кидай <b>Покеболы</b> и умножай свои Starts"
+        mess_botton = "Забрать 100 Здвезд"
+
     else:
-        mess = "Го ловить Stars"
-        mess_botton = "Забрать 200 Здвезд"
+        mess = "Кидай <b>Покеболы</b> и умножай свои Starts"
+        mess_botton = "Забрать 100 Здвезд"
 
     # Создаем кнопку с Mini App
     # Если есть startapp_param, передаем его через start_parameter (для Telegram API)
     # И также добавляем в URL (для фронтенда)
+
+
     web_app_info = WebAppInfo(url=game_url)
     if startapp_param:
         # Передаем параметр через start_parameter для Telegram API
