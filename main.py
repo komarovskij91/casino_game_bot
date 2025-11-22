@@ -258,6 +258,105 @@ async def command_start_handler(message: Message) -> None:
 
 
 
+
+# Обработчик для всех сообщений в супергруппе
+# @dp.message()
+# async def chek_m(message: types.Message):
+#
+#
+#     # Проверяем, что сообщение пришло из супергруппы
+#     # if message.chat.type == "supergroup":
+#     #     user_id = message.from_user.id  # Получаем ID пользователя
+#     #     chat_id = message.chat.id  # Получаем ID супергруппы
+#     #
+#     #     # print(message)
+#     #
+#     #     # print(f"Сообщение из супергруппы {chat_id}, от пользователя {user_id}. Текст: {message.text}")
+#     #     try:
+#     #         # Получаем текущее время в формате секунд с начала эпохи
+#     #         tim0 = time.time()
+#     #
+#     #         # сегодня дата
+#     #         day = time.strftime("%Y-%m-%d", time.localtime(tim0))
+#     #
+#     #         # данные игрока
+#     #         user_caht = await redata(f"chat:{user_id}")
+#     #
+#     #         if user_caht != None:
+#     #
+#     #             # манипулии с данными
+#     #
+#     #             # проверсяем если все хорошо
+#     #             if (tim0 - user_caht["old_time"]) < (24 * 60 * 60):
+#     #
+#     #                 # последний день юзера
+#     #                 old_day_user = time.strftime("%Y-%m-%d", time.localtime(user_caht["old_time"]))
+#     #                 if old_day_user != day:
+#     #                     user_caht["old_day"] = day
+#     #                     user_caht["value_day"] += 1
+#     #
+#     #                 user_caht["old_time"] = tim0
+#     #                 user_caht["value_mess"] += 1
+#     #
+#     #             else:
+#     #
+#     #                 user_caht["old_time"] = tim0
+#     #                 user_caht["old_day"] = day
+#     #                 user_caht["old_time"] = 0
+#     #                 user_caht["value_mess"] = 0
+#     #
+#     #
+#     #
+#     #             await reupdata(f"chat:{user_id}", user_caht)
+#     #
+#     #
+#     #
+#     #
+#     #         else:
+#     #
+#     #             # Создаем данные для игрока
+#     #             dd = {
+#     #                 "id_telega": user_id,
+#     #                 "old_time": tim0,
+#     #                 "old_day": time.strftime("%Y-%m-%d", time.localtime(time.time())),
+#     #                 "value_mess": 1,
+#     #                 "value_day": 0,
+#     #                 "day_gift": 0
+#     #             }
+#     #
+#     #             await reupdata(f"chat:{user_id}", dd)
+#     #
+#     #     except Exception as ex:
+#     #
+#     #         mess = f"Ошибка в чекере времея в чате: {ex},\nuser_id: {user_id}"
+#     #         print(mess)
+#     #         await bot.send_message(310410518, mess)
+#     #
+#     #
+#     #
+#     if message.chat.type == "private":
+#         print(message)
+#
+#         user_id = message.from_user.id  # Получаем ID пользователя
+#         chat_id = message.chat.id
+#
+#
+#         # if user_id == 310410518:
+#         #     urll = "https://t.me/mastercatonlinebot/mastercats"
+#         #     mess = f"Master Cat Online"
+#         #
+#         #     # Создание кнопки с веб-приложением
+#         #     bt_by_viki = InlineKeyboardButton(text="Play Master Cat", url=urll)
+#         #
+#         #     # Создание клавиатуры с использованием inline_keyboard
+#         #     kb = InlineKeyboardMarkup(inline_keyboard=[[bt_by_viki]])
+#         #
+#         #     await bot.send_message(int(-1002301080691), mess, reply_markup=kb)
+#         #
+#         # # -1002301080691
+
+
+
 ###### Саша
 
 @dp.pre_checkout_query()
